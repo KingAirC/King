@@ -16,6 +16,95 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `inf_book`
+--
+
+DROP TABLE IF EXISTS `inf_book`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inf_book` (
+  `id` varchar(45) NOT NULL COMMENT 'ID',
+  `name` varchar(45) NOT NULL DEFAULT '' COMMENT '书名',
+  `ISBN` varchar(45) NOT NULL DEFAULT '' COMMENT 'ISBN',
+  `author` varchar(45) NOT NULL DEFAULT '' COMMENT '作者',
+  `edition` varchar(45) NOT NULL DEFAULT '' COMMENT '版本',
+  `volume` varchar(45) NOT NULL DEFAULT '' COMMENT '卷册',
+  `publisher` varchar(45) NOT NULL DEFAULT '' COMMENT '出版社',
+  `pdf` varchar(1024) NOT NULL DEFAULT '' COMMENT 'pdf路径',
+  `picture` varchar(1024) NOT NULL DEFAULT '' COMMENT '封面图片',
+  `comment` varchar(1024) NOT NULL DEFAULT '' COMMENT '备注',
+  `createUserId` varchar(45) NOT NULL DEFAULT '' COMMENT '创建者Id',
+  `updateUserId` varchar(45) NOT NULL DEFAULT '' COMMENT '更新者id',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleteFlag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识符',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='书籍';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inf_book`
+--
+
+LOCK TABLES `inf_book` WRITE;
+/*!40000 ALTER TABLE `inf_book` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inf_book` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `inf_book_subjects`
+--
+
+DROP TABLE IF EXISTS `inf_book_subjects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inf_book_subjects` (
+  `bookId` varchar(45) NOT NULL DEFAULT '',
+  `subjectsId` varchar(45) NOT NULL DEFAULT '' COMMENT '科目id',
+  `createUserId` varchar(45) NOT NULL DEFAULT '' COMMENT '创建者id',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`bookId`,`subjectsId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='书籍所属的科目';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inf_book_subjects`
+--
+
+LOCK TABLES `inf_book_subjects` WRITE;
+/*!40000 ALTER TABLE `inf_book_subjects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inf_book_subjects` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `inf_subjects`
+--
+
+DROP TABLE IF EXISTS `inf_subjects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inf_subjects` (
+  `id` varchar(45) NOT NULL COMMENT 'ID',
+  `name` varchar(45) NOT NULL DEFAULT '' COMMENT '名称',
+  `createUserId` varchar(45) NOT NULL DEFAULT '' COMMENT '创建者id',
+  `updateUserId` varchar(45) NOT NULL DEFAULT '' COMMENT '更新者id',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleteFlag` tinyint(2) NOT NULL DEFAULT '0' COMMENT '删除标识符',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='科目';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inf_subjects`
+--
+
+LOCK TABLES `inf_subjects` WRITE;
+/*!40000 ALTER TABLE `inf_subjects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inf_subjects` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sys_menu`
 --
 
@@ -48,7 +137,7 @@ CREATE TABLE `sys_menu` (
 
 LOCK TABLES `sys_menu` WRITE;
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
-INSERT INTO `sys_menu` VALUES ('1','系统设置','','','系统设置','',0,'_self','D','','','','2020-08-30 10:27:36','2020-08-30 17:55:58',0),('11','系统管理员','1','admin/system/user','系统管理员','fa fa-user',1,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:56:44',0),('12','菜单管理','1','admin/system/menu/to/menu/mng','菜单管理','fa fa-folder-open',2,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:56:44',0),('121','菜单添加','12','','菜单添加','',1,'_self','B','sys:menu:add','','','2020-08-30 10:27:36','2020-08-30 17:58:02',0),('13','角色管理','1','admin/system/role','角色管理','fa fa-group',3,'_self','M','sys:role:list','','','2020-08-30 10:27:36','2020-08-30 18:00:06',0),('14','代码生成','1','admin/system/generator','','fa fa-gears',4,'_self','M','','','','2020-08-30 17:56:35','2020-08-30 18:09:26',0),('2','数学社区','','','数专考研','',2,'_self','D','','','','2020-08-30 10:27:36','2020-08-30 18:02:45',0),('21','基础信息管理','2','','基础信息管理','fa fa-info',1,'_self','D','','','','2020-08-30 10:27:36','2020-08-30 17:57:14',0),('211','科目管理','21','','科目管理','fa fa-navicon',2,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:57:14',0),('212','书籍管理','21','','书籍管理','fa fa-book',3,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:57:14',0),('3','大学一条龙','','','大学一条龙','',2,'_self','D','','','','2020-08-30 17:50:01','2020-08-30 18:05:03',0),('4','防丢卡套','','','防丢卡套','',4,'_self','D','','','','2020-08-30 17:52:20','2020-08-30 18:05:03',0);
+INSERT INTO `sys_menu` VALUES ('1','系统设置','','','系统设置','',0,'_self','D','','','','2020-08-30 10:27:36','2020-08-30 17:55:58',0),('11','系统管理员','1','admin/system/user','系统管理员','fa fa-user',1,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:56:44',0),('12','菜单管理','1','admin/system/menu/to/menu/mng','菜单管理','fa fa-folder-open',2,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:56:44',0),('121','菜单添加','12','','菜单添加','',1,'_self','B','sys:menu:add','','','2020-08-30 10:27:36','2020-08-30 17:58:02',0),('13','角色管理','1','admin/system/role','角色管理','fa fa-group',3,'_self','M','sys:role:list','','','2020-08-30 10:27:36','2020-08-30 18:00:06',0),('14','代码生成','1','admin/system/generator','','fa fa-gears',4,'_self','M','','','','2020-08-30 17:56:35','2020-08-30 18:09:26',0),('2','数学社区','','','数专考研','',2,'_self','D','','','','2020-08-30 10:27:36','2020-09-01 10:58:28',0),('20','客户端','2','infinite/index/index','客户端','fa fa-circle',0,'_blank','D','','','','2020-09-01 10:33:19','2020-09-01 10:33:19',0),('21','基础信息管理','2','','基础信息管理','fa fa-info',1,'_self','D','','','','2020-08-30 10:27:36','2020-08-30 17:57:14',0),('211','科目管理','21','','科目管理','fa fa-navicon',2,'_self','M','','','','2020-08-30 10:27:36','2020-08-30 17:57:14',0),('212','书籍管理','21','admin/inf/book/index','书籍管理','fa fa-book',3,'_self','M','','','','2020-08-30 10:27:36','2020-09-01 17:31:17',0),('3','大学一条龙','','','大学一条龙','',2,'_self','D','','','','2020-08-30 17:50:01','2020-08-30 18:05:03',0),('4','防丢卡套','','','防丢卡套','',4,'_self','D','','','','2020-08-30 17:52:20','2020-08-30 18:05:03',0);
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,4 +268,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-01 10:01:25
+-- Dump completed on 2020-09-01 23:51:23
