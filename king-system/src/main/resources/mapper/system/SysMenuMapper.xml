@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.system.mapper.SysMenuMapper">
+    <resultMap id="BaseResultMap" type="com.king.system.pojo.SysMenu">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="href" jdbcType="VARCHAR" property="href"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="target" jdbcType="VARCHAR" property="target"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="permission" jdbcType="VARCHAR" property="permission"/>
+        <result column="createUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleteFlag" jdbcType="TINYINT" property="deleteFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, pid, href, remark, icon, sort, target,
+        type, permission, createUserId, updateUserId,
+        createTime, updateTime, deleteFlag
+    </sql>
+    <insert id="insert" parameterType="com.king.system.pojo.SysMenu">
+        INSERT INTO sys_menu (id, name, pid, href, remark, icon, sort, target,
+                              type, permission, createUserId, updateUserId, deleteFlag)
+        VALUES (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR},
+                #{href,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},
+                #{sort,jdbcType=INTEGER}, #{target,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+                #{permission,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR}, #{updateUserId,jdbcType=VARCHAR},
+                #{deleteFlag,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertBatch" parameterType="com.king.system.pojo.SysMenu">
+        INSERT INTO sys_menu (id, name, pid, href, remark, icon, sort, target,
+        type, permission, createUserId, updateUserId, deleteFlag)
+        VALUES
+        <foreach collection="sysMenus" item="sysMenu" separator=",">
+            (#{sysMenu.id,jdbcType=VARCHAR}, #{sysMenu.name,jdbcType=VARCHAR}, #{sysMenu.pid,jdbcType=VARCHAR},
+            #{sysMenu.href,jdbcType=VARCHAR}, #{sysMenu.remark,jdbcType=VARCHAR}, #{sysMenu.icon,jdbcType=VARCHAR},
+            #{sysMenu.sort,jdbcType=INTEGER}, #{sysMenu.target,jdbcType=VARCHAR}, #{sysMenu.type,jdbcType=VARCHAR},
+            #{sysMenu.permission,jdbcType=VARCHAR}, #{sysMenu.createUserId,jdbcType=VARCHAR},
+            #{sysMenu.updateUserId,jdbcType=VARCHAR},
+            #{sysMenu.deleteFlag,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.king.system.pojo.SysMenu">
+        INSERT INTO sys_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="name != null">
+                name,
+            </if>
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="href != null">
+                href,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="target != null">
+                target,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="permission != null">
+                permission,
+            </if>
+            <if test="createUserId != null">
+                createUserId,
+            </if>
+            <if test="updateUserId != null">
+                updateUserId,
+            </if>
+            <if test="deleteFlag != null">
+                deleteFlag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="href != null">
+                #{href,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="target != null">
+                #{target,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteFlag != null">
+                #{deleteFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertBatchSelective" parameterType="com.king.system.pojo.SysMenu">
+        INSERT INTO sys_menu
+        (id, name, pid, href, remark, icon, sort, target,
+        type, permission, createUserId, updateUserId, deleteFlag)
+        VALUES
+        <foreach collection="sysMenus" item="sysMenu" separator=",">
+            (
+            #{sysMenu.id,jdbcType=VARCHAR},
+            ifnull(#{sysMenu.name,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.pid,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.href,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.remark,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.icon,jdbcType=VARCHAR}, 'fa fa-circle'),
+            ifnull(#{sysMenu.sort,jdbcType=INTEGER}, 0),
+            ifnull(#{sysMenu.target,jdbcType=VARCHAR}, '_self'),
+            ifnull(#{sysMenu.type,jdbcType=VARCHAR}, 'M'),
+            ifnull(#{sysMenu.permission,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.createUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.updateUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysMenu.deleteFlag,jdbcType=TINYINT}, 0)
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteByPk" parameterType="com.king.system.pojo.SysMenu">
+        DELETE
+        FROM sys_menu
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteBatch" parameterType="com.king.system.pojo.SysMenu">
+        DELETE FROM sys_menu WHERE id IN
+        <foreach collection="sysMenus" item="sysMenu" separator="," open="(" close=")">
+            #{sysMenu.id}
+        </foreach>
+    </delete>
+    <update id="updateByPk" parameterType="com.king.system.pojo.SysMenu">
+        UPDATE sys_menu
+        SET name         = #{name,jdbcType=VARCHAR},
+            pid          = #{pid,jdbcType=VARCHAR},
+            href         = #{href,jdbcType=VARCHAR},
+            remark       = #{remark,jdbcType=VARCHAR},
+            icon         = #{icon,jdbcType=VARCHAR},
+            sort         = #{sort,jdbcType=INTEGER},
+            target       = #{target,jdbcType=VARCHAR},
+            type         = #{type,jdbcType=VARCHAR},
+            permission   = #{permission,jdbcType=VARCHAR},
+            updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPkSelective" parameterType="com.king.system.pojo.SysMenu">
+        UPDATE sys_menu
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="pid != null">
+                pid = #{pid,jdbcType=VARCHAR},
+            </if>
+            <if test="href != null">
+                href = #{href,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="target != null">
+                target = #{target,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="permission != null">
+                permission = #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null">
+                updateUserId = #{updateUserId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateDeleteFlag" parameterType="com.king.system.pojo.SysMenu">
+        UPDATE sys_menu
+        SET deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="select4DetailByPk" parameterType="com.king.system.pojo.SysMenu" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_menu WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="select4List" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_menu ORDER BY createTime
+    </select>
+    <select id="select4ListSelective" parameterType="com.king.system.pojo.SysMenu" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_menu WHERE TRUE
+        <if test="name != null and name != ''">
+            AND name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="pid != null and pid != ''">
+            AND pid = #{pid,jdbcType=VARCHAR}
+        </if>
+        <if test="href != null and href != ''">
+            AND href = #{href,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null and remark != ''">
+            AND remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="icon != null and icon != ''">
+            AND icon = #{icon,jdbcType=VARCHAR}
+        </if>
+        <if test="sort != null">
+            AND sort = #{sort,jdbcType=INTEGER}
+        </if>
+        <if test="target != null and target != ''">
+            AND target = #{target,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="permission != null and permission != ''">
+            AND permission = #{permission,jdbcType=VARCHAR}
+        </if>
+        <if test="createUserId != null and createUserId != ''">
+            AND createUserId = #{createUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUserId != null and updateUserId != ''">
+            AND updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            AND updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="deleteFlag != null">
+            AND deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        </if>
+        ORDER BY createTime
+    </select>
+    <select id="select4Count" parameterType="com.king.system.pojo.SysMenu" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM sys_menu WHERE TRUE
+        <if test="name != null and name != ''">
+            AND name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="pid != null and pid != ''">
+            AND pid = #{pid,jdbcType=VARCHAR}
+        </if>
+        <if test="href != null and href != ''">
+            AND href = #{href,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null and remark != ''">
+            AND remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="icon != null and icon != ''">
+            AND icon = #{icon,jdbcType=VARCHAR}
+        </if>
+        <if test="sort != null">
+            AND sort = #{sort,jdbcType=INTEGER}
+        </if>
+        <if test="target != null and target != ''">
+            AND target = #{target,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="permission != null and permission != ''">
+            AND permission = #{permission,jdbcType=VARCHAR}
+        </if>
+        <if test="createUserId != null and createUserId != ''">
+            AND createUserId = #{createUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUserId != null and updateUserId != ''">
+            AND updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            AND updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="deleteFlag != null">
+            AND deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        </if>
+    </select>
+    <select id="select4PermissionListByShiroUserLoginName" resultType="java.lang.String">
+        SELECT M.permission
+        FROM sys_menu M
+                 LEFT JOIN sys_role_menu RM ON RM.menuId = M.id
+                 LEFT JOIN sys_role R ON R.id = RM.roleId
+                 LEFT JOIN sys_user_role UR ON UR.roleId = R.id
+                 LEFT JOIN sys_user U ON U.id = UR.userId
+        WHERE U.loginName = #{loginName,jdbcType=VARCHAR}
+    </select>
+    <select id="select4DirAndMenuList" resultType="com.king.system.pojo.SysMenu">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_menu
+        WHERE deleteFlag = 0 AND type IN ('D', 'M')
+        ORDER BY sort
+    </select>
+</mapper>

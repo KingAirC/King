@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('代码生成')"/>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label for="name" class="layui-form-label">表名</label>
+                            <div class="layui-input-inline">
+                                <input id="name" type="text" name="name" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'table'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render(king.defaultTableRender(ctx + 'admin/system/generator/list/page', [
+            [
+                {field: 'name', minWidth: 150, title: '表名'},
+                {
+                    title: '操作', width: 200, align: "center", fixed: 'right', templet: function (d) {
+                        let operateBtns = '';
+
+                        operateBtns += '<a class="layui-btn layui-btn-primary layui-btn-xs data-count-detail" lay-event="generator">生成</a>';
+
+                        return operateBtns
+                    }
+                }
+            ]
+        ]));
+
+        form.on('submit(data-search-btn)', function (data) {
+            table.reload('currentTableId', {where: data.field});
+            return false
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'generator') {
+                console.log(data.name);
+
+                return false
+            }
+        })
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('系统管理员')"/>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <!--  搜索  -->
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label for="loginNameSearchId" class="layui-form-label">登录名</label>
+                            <div class="layui-input-inline">
+                                <input id="loginNameSearchId" type="text" name="loginName" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label for="realNameSearchId" class="layui-form-label">姓名</label>
+                            <div class="layui-input-inline">
+                                <input id="realNameSearchId" type="text" name="realName" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label for="genderSearchId" class="layui-form-label">性别</label>
+                            <div class="layui-input-block">
+                                <select id="genderSearchId" name="gender">
+                                    <option value=""></option>
+                                    <option value="1">男</option>
+                                    <option value="0">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label for="ageMinSearchId" class="layui-form-label">年龄范围</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline" style="width: 40%;">
+                                    <input id="ageMinSearchId" type="number" name="ageMin" placeholder=""
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">-</div>
+                                <div class="layui-input-inline" style="width: 40%;">
+                                    <label for="ageMaxSearchId"></label>
+                                    <input id="ageMaxSearchId" type="number" name="ageMax" placeholder=""
+                                           autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label for="birthdaySearchId" class="layui-form-label">出生日期</label>
+                            <div class="layui-input-inline">
+                                <input id="birthdaySearchId" type="text" name="birthday" autocomplete="off"
+                                       class="layui-input" placeholder="1970-01-01">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label for="qqSearchId" class="layui-form-label">QQ</label>
+                            <div class="layui-input-inline">
+                                <input id="qqSearchId" type="text" name="qq" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label for="deleteFlagSearchId" class="layui-form-label">是否删除</label>
+                            <div class="layui-input-block">
+                                <select id="deleteFlagSearchId" name="deleteFlag">
+                                    <option value=""></option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <!--  工具栏  -->
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除</button>
+            </div>
+        </script>
+
+        <!--  数据表格  -->
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'table', 'laydate'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#birthdaySearchId'
+        });
+
+        table.render(king.defaultTableRender(ctx + 'admin/system/user/list/page', [
+            [
+                {type: "checkbox", width: 50, fixed: 'left'},
+                {field: 'id', title: "ID", hide: true},
+                {field: 'loginName', minWidth: 150, title: '登录名'},
+                {field: 'realName', minWidth: 150, title: '姓名'},
+                {
+                    field: 'gender', minWidth: 80, title: '性别', templet: function (d) {
+                        return king.getGenderIcon(d.gender)
+                    }
+                },
+                {
+                    field: 'birthday', minWidth: 80, sort: true, title: '年龄', templet: function (d) {
+                        return king.getAge(d.birthday);
+                    }
+                },
+                {field: 'createTime', minWidth: 180, title: '创建时间', sort: true},
+                {
+                    title: '操作', width: 200, align: "center", fixed: 'right', templet: function (d) {
+                        let operateBtns = '';
+
+                        operateBtns += '<a class="layui-btn layui-btn-primary layui-btn-xs data-count-detail" lay-event="detail">查看</a>';
+                        operateBtns += '<a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>';
+                        if (d.deleteFlag === 0) {
+                            operateBtns += '<a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="delete">删除</a>';
+                        }
+
+                        return operateBtns
+                    }
+                }
+            ]
+        ]));
+
+        form.on('submit(data-search-btn)', function (data) {
+            table.reload('currentTableId', {where: data.field});
+            return false
+        });
+
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                let index = layer.open(king.getLayerDefaultArgs('添加', ctx + 'admin/system/user/add', function () {
+                        table.reload('currentTableId')
+                    }
+                ));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                });
+            } else if (obj.event === 'delete') {
+                $.post(ctx + 'admin/system/user/delete/batch',
+                    {shiroUsers: JSON.stringify(table.checkStatus('currentTableId').data)},
+                    function (result) {
+                        result ? table.reload('currentTableId') : layer.msg('删除失败')
+                    })
+            }
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                let index = layer.open(king.getLayerDefaultArgs('编辑', ctx + 'admin/system/user/edit/' + data.id, function () {
+                    table.reload('currentTableId')
+                }));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除' + data.loginName + '么', function (index) {
+                    $.post(ctx + 'admin/system/user/delete',
+                        {id: data.id},
+                        function (result) {
+                            result ? obj.del() : layer.msg('删除失败')
+                        });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'detail') {
+                let index = layer.open(king.getLayerDefaultArgs('详细', ctx + 'admin/system/user/detail/' + data.id));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                })
+            }
+        })
+    });
+</script>
+</body>
+</html>

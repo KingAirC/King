@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.system.mapper.SysUserRoleMapper">
+    <resultMap id="BaseResultMap" type="com.king.system.pojo.SysUserRole">
+        <id column="userId" jdbcType="VARCHAR" property="userId"/>
+        <id column="roleId" jdbcType="VARCHAR" property="roleId"/>
+        <result column="createUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        userId, roleId, createUserId, createTime
+    </sql>
+    <insert id="insert" parameterType="com.king.system.pojo.SysUserRole">
+        INSERT INTO sys_user_role (userId, roleId, createUserId)
+        VALUES (#{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertBatch" parameterType="com.king.system.pojo.SysUserRole">
+        INSERT INTO sys_user_role (userId, roleId, createUserId)
+        VALUES
+        <foreach collection="sysUserRoles" item="sysUserRole" separator=",">
+            (
+            #{userId,jdbcType=VARCHAR},
+            #{roleId,jdbcType=VARCHAR},
+            #{createUserId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.king.system.pojo.SysUserRole">
+        INSERT INTO sys_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            userId, roleId,
+            <if test="createUserId != null and createUserId != ''">
+                createUserId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{userId,jdbcType=VARCHAR},
+            #{roleId,jdbcType=VARCHAR},
+            <if test="createUserId != null and createUserId != ''">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertBatchSelective" parameterType="com.king.system.pojo.SysUserRole">
+        INSERT INTO sys_user_role (userId, roleId, createUserId)
+        VALUES
+        <foreach collection="sysUserRoles" item="sysUserRole" separator=",">
+            (
+            #{sysUserRole.userId,jdbcType=VARCHAR},
+            #{sysUserRole.roleId,jdbcType=VARCHAR},
+            ifnull(#{sysUserRole.createUserId,jdbcType=VARCHAR}, '')
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteByPk" parameterType="com.king.system.pojo.SysUserRole">
+        DELETE
+        FROM sys_user_role
+        WHERE userId = #{userId,jdbcType=VARCHAR}
+          AND roleId = #{roleId,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteBatchByUserId" parameterType="com.king.system.pojo.SysUserRole">
+        DELETE
+        FROM sys_user_role
+        WHERE userId = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteBatchByRoleId" parameterType="com.king.system.pojo.SysUserRole">
+        DELETE
+        FROM sys_user_role
+        WHERE roleId = #{roleId,jdbcType=VARCHAR}
+    </delete>
+</mapper>

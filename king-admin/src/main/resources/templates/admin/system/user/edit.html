@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('详细')"/>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label for="loginNameEditId" class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input name="loginName" id="loginNameEditId" type="text" th:value="${shiroUserDetail.loginName}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="birthdayEditId" class="layui-form-label">出生日期</label>
+        <div class="layui-input-inline">
+            <input id="birthdayEditId" type="text" name="birthday" autocomplete="off"
+                   class="layui-input" placeholder="1970-01-01" th:value="${shiroUserDetail.birthday}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="telEditId" class="layui-form-label">电话号</label>
+        <div class="layui-input-block">
+            <input name="tel" id="telEditId" type="tel" th:value="${shiroUserDetail.tel}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="realNameEditId" class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input name="realName" id="realNameEditId" type="text" th:value="${shiroUserDetail.realName}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="gender" value="1" title="男" th:field="*{shiroUserDetail.gender}">
+            <input type="radio" name="gender" value="0" title="女" th:field="*{shiroUserDetail.gender}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="qqEditId" class="layui-form-label">QQ</label>
+        <div class="layui-input-block">
+            <input name="qq" id="qqEditId" type="text" class="layui-input" th:value="${shiroUserDetail.qq}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="signatureEditId" class="layui-form-label">个性签名</label>
+        <div class="layui-input-block">
+            <input name="signature" id="signatureEditId" type="text" class="layui-input" th:value="${shiroUserDetail.signature}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label for="passwordTextEditId" class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input name="passwordText" id="passwordTextEditId" type="text" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'jquery'], function () {
+        let form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        form.on('submit(saveBtn)', function (data) {
+            data.field.id = [[${id}]];
+            $.post(ctx + 'admin/system/user/edit', data.field, function (result) {
+                if (result) {
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    layer.msg('编辑失败')
+                }
+            })
+        })
+    });
+</script>
+</body>
+</html>

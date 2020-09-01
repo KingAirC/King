@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: admin_header('菜单管理')"/>
+    <style>
+        .layui-btn:not(.layui-btn-lg ):not(.layui-btn-sm):not(.layui-btn-xs) {
+            height: 34px;
+            line-height: 34px;
+            padding: 0 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div>
+            <div class="layui-btn-group">
+                <button class="layui-btn" id="btn-expand">全部展开</button>
+                <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+            </div>
+            <table id="munu-table" class="layui-table" lay-filter="munu-table"></table>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['table', 'treetable'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var treetable = layui.treetable;
+
+        let menuData = [[${menu}]];
+        let menuData4Render = [];
+
+        for (let i in menuData) {
+            let each = menuData[i];
+            menuData4Render.push({
+                authorityId: each.id,
+                authorityName: each.name,
+                orderNumber: each.sort,
+                menuUrl: each.href,
+                menuIcon: "layui-icon-set",
+                createTime: each.createTime,
+                authority: each.permission,
+                checked: 0,
+                updateTime: each.updateTime,
+                parentId: each.pid == '' ? -1 : each.pid,
+                type: each.type
+            })
+        }
+
+        // 渲染表格
+        layer.load(2);
+        treetable.render({
+            treeColIndex: 1,
+            treeSpid: -1,
+            treeIdName: 'authorityId',
+            treePidName: 'parentId',
+            elem: '#munu-table',
+            data: menuData4Render,
+            page: false,
+            cols: [
+                [
+                    {type: 'numbers'},
+                    {field: 'authorityName', width: 250, minWidth: 200, title: '权限名称'},
+                    {field: 'authority', width: 200, title: '权限标识'},
+                    {field: 'menuUrl', width:250, title: '菜单url'},
+                    {field: 'orderNumber', width: 80, align: 'center', title: '排序号'},
+                    {
+                        field: 'isMenu', width: 80, align: 'center', templet: function (d) {
+                            if (d.type == 'B') {
+                                return '<span class="layui-badge layui-bg-red">按钮</span>';
+                            } else if (d.type == 'D') {
+                                return '<span class="layui-badge layui-bg-blue">目录</span>';
+                            } else if (d.type == 'M') {
+                                return '<span class="layui-badge layui-bg-green">菜单</span>';
+                            }
+                        }, title: '类型'
+                    },
+                    {
+                        width: 200, align: 'center', title: '操作', templet: function (d) {
+                            let str = '';
+
+                            str += '<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>';
+                            str += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+
+                            if (d.type == 'D' || d.type == 'M') {
+                                str += '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="add">添加子节点</a>';
+                            }
+
+                            return str
+                        }
+                    }
+                ]
+            ],
+            done: function () {
+                layer.closeAll('loading');
+            }
+        });
+
+        $('#btn-expand').hide();
+        $('#btn-expand').click(function () {
+            $('#btn-expand').hide();
+            $('#btn-fold').show();
+            treetable.expandAll('#munu-table');
+        });
+
+        $('#btn-fold').click(function () {
+            $('#btn-fold').hide();
+            $('#btn-expand').show();
+            treetable.foldAll('#munu-table');
+        });
+
+        //监听工具条
+        table.on('tool(munu-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') {
+                console.log(data.id);
+            } else if (layEvent === 'edit') {
+                console.log(data.id);
+            }
+        });
+    });
+</script>
+</body>
+</html>

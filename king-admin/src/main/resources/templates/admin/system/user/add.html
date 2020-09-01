@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('添加')"/>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">登录名</label>
+        <div class="layui-input-block">
+            <label>
+                <input name="loginName" type="text" class="layui-input" lay-verify="required" lay-reqtext="登录名不能为空"
+                       placeholder="请输入登录名">
+            </label>
+            <tip>填写自己管理账号的名称。</tip>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">密码</label>
+        <div class="layui-input-block">
+            <label>
+                <input name="passwordText" type="password" class="layui-input" lay-verify="required" lay-reqtext="密码不能为空"
+                       placeholder="请输入密码">
+            </label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">出生日期</label>
+        <div class="layui-input-block">
+            <label for="birthdayId"></label><input name="birthday" id="birthdayId" type="text" class="layui-input" placeholder="1970-01-01">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话号</label>
+        <div class="layui-input-block">
+            <label>
+                <input name="tel" type="tel" class="layui-input">
+            </label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <label>
+                <input name="realName" type="text" class="layui-input">
+            </label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="gender" value="1" title="男" checked="">
+            <input type="radio" name="gender" value="0" title="女">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">QQ</label>
+        <div class="layui-input-block">
+            <label>
+                <input name="qq" type="text" class="layui-input">
+            </label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">个行签名</label>
+        <div class="layui-input-block">
+            <label>
+                <input name="signature" type="text" class="layui-input">
+            </label>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'laydate', 'jquery'], function () {
+        let form = layui.form,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            $ = layui.jquery;
+
+        laydate.render({
+            elem: '#birthdayId'
+        });
+
+        form.on('submit(saveBtn)', function (data) {
+            $.post(ctx + 'admin/system/user/add', data.field, function (result) {
+                if (result) {
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    layer.msg('添加失败');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

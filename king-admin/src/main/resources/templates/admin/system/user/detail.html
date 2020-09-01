@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: admin_header('详细')"/>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input readonly type="text" th:value="${shiroUserDetail.loginName}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话号</label>
+        <div class="layui-input-block">
+            <input readonly type="tel" th:value="${shiroUserDetail.tel}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input readonly type="text" th:value="${shiroUserDetail.realName}" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <td th:switch="${shiroUserDetail.gender}">
+                <i th:case="0" class="layui-icon layui-icon-female" style="font-size: 30px; color: #F581B1;"></i>
+                <i th:case="1" class="layui-icon layui-icon-male" style="font-size: 30px; color: #0000FF;"></i>
+            </td>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄</label>
+        <div class="layui-input-block">
+            <input readonly id="ageId" type="number" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">QQ</label>
+        <div class="layui-input-block">
+            <input readonly type="text" class="layui-input" th:value="${shiroUserDetail.qq}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">个行签名</label>
+        <div class="layui-input-block">
+            <input readonly type="text" class="layui-input" th:value="${shiroUserDetail.signature}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">创建日期</label>
+        <div class="layui-input-block">
+            <input readonly type="text" class="layui-input" th:value="${shiroUserDetail.createTime}">
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(["jquery"], function () {
+        let $ = layui.jquery;
+
+        $("#ageId").val(king.getAge([[${shiroUserDetail.birthday}]]))
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.system.mapper.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.king.system.pojo.SysUser">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="loginName" jdbcType="VARCHAR" property="loginName"/>
+        <result column="realName" jdbcType="VARCHAR" property="realName"/>
+        <result column="passwordText" jdbcType="VARCHAR" property="passwordText"/>
+        <result column="passwordEncrypt" jdbcType="VARCHAR" property="passwordEncrypt"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="tel" jdbcType="VARCHAR" property="tel"/>
+        <result column="birthday" jdbcType="VARCHAR" property="birthday"/>
+        <result column="gender" jdbcType="TINYINT" property="gender"/>
+        <result column="signature" jdbcType="VARCHAR" property="signature"/>
+        <result column="qq" jdbcType="VARCHAR" property="qq"/>
+        <result column="createUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleteFlag" jdbcType="TINYINT" property="deleteFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, loginName, realName, passwordText, passwordEncrypt,
+        salt, tel, birthday, gender, signature, qq, createUserId,
+        updateUserId, createTime, updateTime, deleteFlag
+    </sql>
+    <insert id="insert" parameterType="com.king.system.pojo.SysUser">
+        INSERT INTO sys_user (id, loginName, realName, passwordText, passwordEncrypt,
+                              salt, tel, birthday, gender, signature, qq, createUserId,
+                              updateUserId, deleteFlag)
+        VALUES (#{id,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+                #{passwordText,jdbcType=VARCHAR}, #{passwordEncrypt,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR},
+                #{tel,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT},
+                #{signature,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR},
+                #{updateUserId,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertBatch" parameterType="com.king.system.pojo.SysUser">
+        INSERT INTO sys_user (id, loginName, realName, passwordText, passwordEncrypt,
+        salt, tel, birthday, gender, signature, qq, createUserId,
+        updateUserId, deleteFlag)
+        VALUES
+        <foreach collection="sysUsers" item="sysUser" separator=",">
+            (#{sysUser.id,jdbcType=VARCHAR},
+            #{sysUser.loginName,jdbcType=VARCHAR},
+            #{sysUser.realName,jdbcType=VARCHAR},
+            #{sysUser.passwordText,jdbcType=VARCHAR},
+            #{sysUser.passwordEncrypt,jdbcType=VARCHAR},
+            #{sysUser.salt,jdbcType=VARCHAR},
+            #{sysUser.tel,jdbcType=VARCHAR},
+            #{sysUser.birthday,jdbcType=VARCHAR},
+            #{sysUser.gender,jdbcType=TINYINT},
+            #{sysUser.signature,jdbcType=VARCHAR},
+            #{sysUser.qq,jdbcType=VARCHAR},
+            #{sysUser.createUserId,jdbcType=VARCHAR},
+            #{sysUser.updateUserId,jdbcType=VARCHAR},
+            #{sysUser.deleteFlag,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.king.system.pojo.SysUser">
+        INSERT INTO sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="loginName != null and loginName != ''">
+                loginName,
+            </if>
+            <if test="realName != null and realName != ''">
+                realName,
+            </if>
+            <if test="passwordText != null and passwordText != ''">
+                passwordText,
+            </if>
+            <if test="passwordEncrypt != null and passwordEncrypt != ''">
+                passwordEncrypt,
+            </if>
+            <if test="salt != null and salt != ''">
+                salt,
+            </if>
+            <if test="tel != null and tel != ''">
+                tel,
+            </if>
+            <if test="birthday != null and birthday != ''">
+                birthday,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="signature != null and signature != ''">
+                signature,
+            </if>
+            <if test="qq != null and qq != ''">
+                qq,
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                createUserId,
+            </if>
+            <if test="updateUserId != null and updateUserId != ''">
+                updateUserId,
+            </if>
+            <if test="deleteFlag != null">
+                deleteFlag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null and loginName != ''">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null and realName != ''">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordText != null and passwordText != ''">
+                #{passwordText,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordEncrypt != null and passwordEncrypt!= ''">
+                #{passwordEncrypt,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null and salt != ''">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null and tel != ''">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null and birthday != ''">
+                #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="signature != null and signature != ''">
+                #{signature,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null and qq != ''">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null and updateUserId != ''">
+                #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteFlag != null">
+                #{deleteFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertBatchSelective">
+        INSERT INTO sys_user (id, loginName, realName, passwordText, passwordEncrypt,
+        salt, tel, birthday, gender, signature, qq, createUserId,
+        updateUserId, deleteFlag)
+        VALUES
+        <foreach collection="sysUsers" item="sysUser" separator=",">
+            (#{sysUser.id,jdbcType=VARCHAR},
+            ifnull(#{sysUser.loginName,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.realName,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.passwordText,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.passwordEncrypt,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.salt,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.tel,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.birthday,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.gender,jdbcType=TINYINT}, 0),
+            ifnull(#{sysUser.signature,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.qq,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.createUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.updateUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysUser.deleteFlag,jdbcType=TINYINT}, 0))
+        </foreach>
+    </insert>
+    <delete id="deleteByPk" parameterType="com.king.system.pojo.SysUser">
+        DELETE
+        FROM sys_user
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteBatch" parameterType="com.king.system.pojo.SysUser">
+        DELETE FROM sys_user WHERE id IN
+        <foreach collection="sysUsers" item="sysUser" separator="," open="(" close=")">
+            #{sysUser.id,jdbcType=VARCHAR}
+        </foreach>
+    </delete>
+    <update id="updateByPk" parameterType="com.king.system.pojo.SysUser">
+        UPDATE sys_user
+        SET loginName       = #{loginName,jdbcType=VARCHAR},
+            realName        = #{realName,jdbcType=VARCHAR},
+            passwordText    = #{passwordText,jdbcType=VARCHAR},
+            passwordEncrypt = #{passwordEncrypt,jdbcType=VARCHAR},
+            salt            = #{salt,jdbcType=VARCHAR},
+            tel             = #{tel,jdbcType=VARCHAR},
+            birthday        = #{birthday,jdbcType=VARCHAR},
+            gender          = #{gender,jdbcType=TINYINT},
+            signature       = #{signature,jdbcType=VARCHAR},
+            qq              = #{qq,jdbcType=VARCHAR},
+            updateUserId    = #{updateUserId,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPkSelective" parameterType="com.king.system.pojo.SysUser">
+        UPDATE sys_user
+        <set>
+            <if test="loginName != null and loginName != ''">
+                loginName = #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                realName = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordText != null and passwordText != ''">
+                passwordText = #{passwordText,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordEncrypt != null and passwordEncrypt != ''">
+                passwordEncrypt = #{passwordEncrypt,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null and salt != ''">
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="tel != null">
+                tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="signature != null">
+                signature = #{signature,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null">
+                updateUserId = #{updateUserId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateDeleteFlag" parameterType="com.king.system.pojo.SysUser">
+        UPDATE sys_user
+        SET deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="select4DetailByPk" parameterType="com.king.system.pojo.SysUser" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_user
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="select4List" parameterType="com.king.system.pojo.SysUser" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_user ORDER BY createTime
+    </select>
+    <select id="select4ListSelective" parameterType="com.king.system.pojo.SysUser"
+            resultType="com.king.system.pojo.SysUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_user WHERE TRUE
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND loginName = #{loginName}
+        </if>
+        <if test="tel != null and tel != ''">
+            AND tel = #{tel}
+        </if>
+        <if test="realName != null and realName != ''">
+            AND realName = #{realName}
+        </if>
+        <if test="gender != null">
+            AND gender = #{gender}
+        </if>
+        <if test="birthday != null and birthday != ''">
+            AND birthday = #{birthday}
+        </if>
+        <if test="qq != null and qq != ''">
+            AND qq = #{qq}
+        </if>
+        <if test="signature != null and signature != ''">
+            AND signature = #{signature}
+        </if>
+        <if test="deleteFlag != null">
+            AND deleteFlag = #{deleteFlag}
+        </if>
+        <if test="ageMin != null">
+            AND year(now()) - year(birthday) >= #{ageMin}
+        </if>
+        <if test="ageMax != null">
+            AND year(now()) - year(birthday) <![CDATA[ <= ]]> #{ageMax}
+        </if>
+        ORDER BY createTime
+    </select>
+    <select id="select4Count" parameterType="com.king.system.pojo.SysUser" resultType="java.lang.Integer">
+        SELECT COUNT(0)
+        FROM sys_user WHERE TRUE
+        <if test="id != null and id != ''">
+            AND id = #{id}
+        </if>
+        <if test="loginName != null and loginName != ''">
+            AND loginName = #{loginName}
+        </if>
+        <if test="tel != null and tel != ''">
+            AND tel = #{tel}
+        </if>
+        <if test="realName != null and realName != ''">
+            AND realName = #{realName}
+        </if>
+        <if test="gender != null">
+            AND gender = #{gender}
+        </if>
+        <if test="birthday != null and birthday != ''">
+            AND birthday = #{birthday}
+        </if>
+        <if test="qq != null and qq != ''">
+            AND qq = #{qq}
+        </if>
+        <if test="signature != null and signature != ''">
+            AND signature = #{signature}
+        </if>
+        <if test="deleteFlag != null">
+            AND deleteFlag = #{deleteFlag}
+        </if>
+        <if test="ageMin != null">
+            AND year(now()) - year(birthday) >= #{ageMin}
+        </if>
+        <if test="ageMax != null">
+            AND year(now()) - year(birthday) <![CDATA[ <= ]]> #{ageMax}
+        </if>
+    </select>
+    <select id="select4NameCount" resultType="java.lang.Integer">
+        SELECT count(loginName)
+        FROM sys_user
+        WHERE loginName = #{username}
+    </select>
+    <select id="selectDetailByName" resultType="com.king.system.pojo.SysUser">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_user WHERE loginName = #{username} LIMIT 1
+    </select>
+</mapper>

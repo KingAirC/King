@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.system.mapper.SysRoleMapper">
+    <resultMap id="BaseResultMap" type="com.king.system.pojo.SysRole">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="createUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleteFlag" jdbcType="TINYINT" property="deleteFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, name, createUserId, updateUserId, createTime, updateTime, deleteFlag
+    </sql>
+    <insert id="insert" parameterType="com.king.system.pojo.SysRole">
+        INSERT INTO sys_role (id, name, createUserId, updateUserId, deleteFlag)
+        VALUES (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{createUserId,jdbcType=VARCHAR},
+                #{updateUserId,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertBatch" parameterType="com.king.system.pojo.SysRole">
+        INSERT INTO sys_role (id, name, createUserId, updateUserId, deleteFlag) VALUES
+        <foreach collection="sysRoles" item="sysRole" separator=",">
+            (#{sysRole.id,jdbcType=VARCHAR}, #{sysRole.name,jdbcType=VARCHAR}, #{sysRole.createUserId,jdbcType=VARCHAR},
+            #{sysRole.updateUserId,jdbcType=VARCHAR}, #{sysRole.deleteFlag,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.king.system.pojo.SysRole">
+        INSERT INTO sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                createUserId,
+            </if>
+            <if test="updateUserId != null and updateUserId != ''">
+                updateUserId,
+            </if>
+            <if test="deleteFlag != null">
+                deleteFlag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null and updateUserId != ''">
+                #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteFlag != null">
+                #{deleteFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertBatchSelective" parameterType="com.king.system.pojo.SysRole">
+        INSERT INTO sys_role
+        (id, name, createUserId, updateUserId, deleteFlag)
+        VALUES
+        <foreach collection="sysRoles" item="sysRole" separator=",">
+            (
+            #{sysRole.id,jdbcType=VARCHAR},
+            ifnull(#{sysRole.name,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysRole.createUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysRole.updateUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{sysRole.deleteFlag,jdbcType=TINYINT}, 0)
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteByPk" parameterType="com.king.system.pojo.SysRole">
+        DELETE
+        FROM sys_role
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteBatch" parameterType="com.king.system.pojo.SysRole">
+        DELETE FROM sys_role WHERE id IN
+        <foreach collection="sysRoles" item="sysRole" separator="," open="(" close=")">
+            #{sysRole.id}
+        </foreach>
+    </delete>
+    <update id="updateByPk" parameterType="com.king.system.pojo.SysRole">
+        UPDATE sys_role
+        SET name         = #{name,jdbcType=VARCHAR},
+            updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPkSelective" parameterType="com.king.system.pojo.SysRole">
+        UPDATE sys_role
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null and updateUserId != ''">
+                updateUserId = #{updateUserId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateDeleteFlag" parameterType="com.king.system.pojo.SysRole">
+        UPDATE sys_role
+        SET deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="select4DetailByPk" parameterType="com.king.system.pojo.SysRole" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_role
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="select4List" parameterType="com.king.system.pojo.SysRole" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_role ORDER BY createTime
+    </select>
+    <select id="select4ListSelective" parameterType="com.king.system.pojo.SysRole" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_role WHERE TRUE
+        <if test="id != null and id != ''">
+            AND id = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null and name != ''">
+            AND name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="createUserId != null and createUserId != ''">
+            AND createUserId = #{createUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND createTime = #{createTime,jdbcType=VARCHAR}
+        </if>
+        <if test="updateUserId != null and updateUserId != ''">
+            AND updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            AND updateTime = #{updateTime,jdbcType=VARCHAR}
+        </if>
+        <if test="deleteFlag != null">
+            AND deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        </if>
+        ORDER BY createTime
+    </select>
+    <select id="select4Count" parameterType="com.king.system.pojo.SysRole" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM sys_role WHERE TRUE
+        <if test="id != null and id != ''">
+            AND id = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null and name != ''">
+            AND name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="createUserId != null and createUserId != ''">
+            AND createUserId = #{createUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null and createTime != ''">
+            AND createTime = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUserId != null and updateUserId != ''">
+            AND updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            AND updateTime = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="deleteFlag != null">
+            AND deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        </if>
+        ORDER BY createTime
+    </select>
+    <select id="selectBySysUserName" resultType="com.king.system.pojo.SysRole">
+        select R.id, R.name
+        from sys_role R
+                 left join sys_user_role UR on R.id = UR.roleId
+                 left join sys_user U on U.id = UR.userId
+        where U.loginName = #{name, jdbcType=VARCHAR}
+    </select>
+    <select id="select4NameBySysUserName" resultType="java.lang.String">
+        select R.name
+        from sys_role R
+                 left join sys_user_role UR on R.id = UR.roleId
+                 left join sys_user U on U.id = UR.userId
+        where U.loginName = #{name, jdbcType=VARCHAR}
+    </select>
+</mapper>

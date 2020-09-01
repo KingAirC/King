@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>king</artifactId>
+        <groupId>com.king</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>king-admin</artifactId>
+    <dependencies>
+
+        <!--  系统服务  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>king-system</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--  通用  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>king-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--  代码生成  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>king-generator</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--  框架  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>king-framework</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--  数学社区  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>infinite</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--  大学一条龙  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>pass</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--  防丢卡套  -->
+        <dependency>
+            <groupId>com.king</groupId>
+            <artifactId>shiningstar</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+
+</project>
