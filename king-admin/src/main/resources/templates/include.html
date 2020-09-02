@@ -40,12 +40,16 @@
     <script th:src="@{/js/myJsLib.js}"></script>
 </div>
 
+<!--  jQuery  -->
+<div th:fragment="jQuery">
+    <script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"/>
+</div>
+
 <!--  文件上传  -->
 <div th:fragment="zyupload_css">
     <link rel="stylesheet" th:href="@{/lib/jq-module/zyupload/zyupload-1.0.0.min.css}" media="all">
 </div>
 <div th:fragment="zyupload_js">
-    <script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"/>
     <script th:src="@{/lib/jq-module/zyupload/zyupload-1.0.0.min.js}" charset="utf-8"/>
 </div>
 

@@ -8,4 +8,8 @@ public class PrimaryKeyUtils {
         return UUID.randomUUID().toString();
     }
 
+    public static String uuidClean() {
+        return uuid().replaceAll("-", "");
+    }
+
 }
