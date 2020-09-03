@@ -1,13 +1,14 @@
 package com.king.generator.service;
 
-import com.king.generator.pojo.MysqlTable;
+import com.king.generator.pojo.GenTable;
 
 import java.util.List;
 
 public interface GeneratorServiceI {
-    void generate(String tableName);
 
-    List<MysqlTable> read4MysqlTable(MysqlTable mysqlTable);
+    List<GenTable> read4GenTable(GenTable genTable);
 
-    int select4TableCount(MysqlTable mysqlTable);
+    byte[] generatorCode(String tableName);
+
+    int select4TableCount(GenTable genTable);
 }

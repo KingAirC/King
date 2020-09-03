@@ -7,4 +7,6 @@ public class Constants {
     public static final String DEFAULT_PAGE_SIZE = "50";
 
     public static final String DEFAULT_FIELD_VALUE = "";
+
+    public static final String UTF8 = "UTF-8";
 }

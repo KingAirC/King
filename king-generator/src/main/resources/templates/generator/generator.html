@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+      lang="zh">
 <head>
     <th:block th:include="include :: admin_header('代码生成')"/>
 </head>
@@ -13,9 +13,9 @@
                 <form class="layui-form layui-form-pane" action="">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label for="name" class="layui-form-label">表名</label>
+                            <label for="tableName" class="layui-form-label">表名</label>
                             <div class="layui-input-inline">
-                                <input id="name" type="text" name="name" autocomplete="off" class="layui-input">
+                                <input id="tableName" type="text" name="tableName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -39,7 +39,7 @@
 
         table.render(king.defaultTableRender(ctx + 'admin/system/generator/list/page', [
             [
-                {field: 'name', minWidth: 150, title: '表名'},
+                {field: 'tableName', minWidth: 150, title: '表名'},
                 {
                     title: '操作', width: 200, align: "center", fixed: 'right', templet: function (d) {
                         let operateBtns = '';
@@ -59,11 +59,9 @@
 
         table.on('tool(currentTableFilter)', function (obj) {
             let data = obj.data;
-            if (obj.event === 'generator') {
-                console.log(data.name);
 
-                return false
-            }
+            location.href = ctx + 'admin/system/generator/genCode/' + data.tableName;
+
         })
 
     });

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.king.generator.mapper.GenTableMapper">
+    <resultMap id="BaseResultMap" type="com.king.generator.pojo.GenTable">
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
+        <result column="TABLE_COMMENT" jdbcType="VARCHAR" property="tableComment"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        TABLE_NAME, TABLE_COMMENT
+    </sql>
+    <select id="select4GenTable" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = (SELECT DATABASE())
+        <if test="tableName != null and tableName != ''">
+            AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="select4Count" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = (SELECT DATABASE())
+        <if test="tableName != null and tableName != ''">
+            AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="select4DetailByTableName" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = (SELECT DATABASE())
+        AND TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

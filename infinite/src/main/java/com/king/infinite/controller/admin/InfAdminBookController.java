@@ -21,7 +21,11 @@ public class InfAdminBookController {
     @PostMapping("/up")
     public boolean up(MultipartFile file) {
 
-        FileUploadUtils.upload(FileUploadPathConfig.getPdf(), file);
+        String dir = FileUploadPathConfig.getPdf();
+
+        String fileName = FileUploadUtils.upload(dir, file);
+
+
 
         return false;
     }

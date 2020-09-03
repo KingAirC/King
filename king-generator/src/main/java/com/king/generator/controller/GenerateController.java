@@ -3,15 +3,15 @@ package com.king.generator.controller;
 import com.github.pagehelper.PageHelper;
 import com.king.common.constant.Constants;
 import com.king.common.core.domain.AjaxResult;
-import com.king.generator.pojo.MysqlTable;
+import com.king.generator.pojo.GenTable;
 import com.king.generator.service.GeneratorServiceI;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -34,21 +34,26 @@ public class GenerateController {
     @RequestMapping("/list/page")
     public AjaxResult list4Page(@RequestParam(defaultValue = "1") int page,
                                 @RequestParam(defaultValue = Constants.DEFAULT_PAGE_SIZE) int limit,
-                                MysqlTable mysqlTable) {
+                                GenTable genTable) {
         PageHelper.startPage(page, limit);
 
-        List<MysqlTable> mysqlTableList = generatorService.read4MysqlTable(mysqlTable);
-        int count = generatorService.select4TableCount(mysqlTable);
+        List<GenTable> genTableList = generatorService.read4GenTable(genTable);
+        int count = generatorService.select4TableCount(genTable);
 
-        AjaxResult ajaxResult = new AjaxResult(mysqlTableList);
+        AjaxResult ajaxResult = new AjaxResult(genTableList);
         ajaxResult.put("count", count);
 
         return ajaxResult;
     }
 
-    @RequestMapping("/gen")
-    public void generate(String tableName) {
-        generatorService.generate(tableName);
+    @GetMapping("/genCode/{tableName}")
+    public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
+        byte[] data = generatorService.generatorCode(tableName);
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=\"king.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        IOUtils.write(data, response.getOutputStream());
     }
 
 }
