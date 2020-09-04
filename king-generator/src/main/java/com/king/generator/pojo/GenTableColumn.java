@@ -9,6 +9,5 @@ public class GenTableColumn {
     private String columnComment;
     private String columnType;
     private String javaType;
-    private String key;
-    private Boolean isPk;
+    private String jdbcType;
 }

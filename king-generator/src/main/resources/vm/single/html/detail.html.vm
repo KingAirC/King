@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: admin_header('详细')"/>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    #foreach(${element} in ${table.columns})
+    <div class="layui-form-item">
+        <label class="layui-form-label">${element.columnComment}</label>
+    <div class="layui-input-block">
+            <input readonly type="text" th:value="$ {data.${element.columnName}}" class="layui-input">
+    </div>
+    </div>
+    #end
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(["jquery"], function () {
+        let $ = layui.jquery;
+    })
+</script>
+</body>
+</html>

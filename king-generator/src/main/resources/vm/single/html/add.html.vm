@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('添加')"/>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    #foreach(${element} in ${table.columns})
+        <div class="layui-form-item">
+            <label class="layui-form-label required">${element.columnComment}</label>
+            <div class="layui-input-block">
+                <label>
+                    <input name="${element.columnName}" type="text" class="layui-input">
+                </label>
+            </div>
+        </div>
+    #end
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'laydate', 'jquery'], function () {
+        let form = layui.form,
+                layer = layui.layer,
+                laydate = layui.laydate,
+                $ = layui.jquery;
+
+        form.on('submit(saveBtn)', function (data) {
+            $.post(ctx + '${table.packageName}add', data.field, function (result) {
+                if (result) {
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    layer.msg('添加失败');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

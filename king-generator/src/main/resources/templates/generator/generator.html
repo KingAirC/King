@@ -40,6 +40,7 @@
         table.render(king.defaultTableRender(ctx + 'admin/system/generator/list/page', [
             [
                 {field: 'tableName', minWidth: 150, title: '表名'},
+                {field: 'tableComment', minWidth: 150, title: '备注'},
                 {
                     title: '操作', width: 200, align: "center", fixed: 'right', templet: function (d) {
                         let operateBtns = '';
@@ -58,10 +59,7 @@
         });
 
         table.on('tool(currentTableFilter)', function (obj) {
-            let data = obj.data;
-
-            location.href = ctx + 'admin/system/generator/genCode/' + data.tableName;
-
+            location.href = ctx + 'admin/system/generator/genCode/' + obj.data.tableName;
         })
 
     });

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${table.packageName}.mapper.${table.className}Mapper">
+    <resultMap id="BaseResultMap" type="${table.packageName}.pojo.${table.className}">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        #foreach(${element} in ${table.columns})
+        <result column="${element.columnName}" jdbcType="${element.jdbcType}" property="${element.columnName}"/>
+        #end
+        <result column="createUserId" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="updateUserId" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleteFlag" jdbcType="TINYINT" property="deleteFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        #foreach(${element} in ${table.columns})
+            ${element.columnName},
+        #end
+        createUserId, updateUserId, createTime, updateTime, deleteFlag
+    </sql>
+    <insert id="insert" parameterType="${table.packageName}.pojo.${table.className}">
+        INSERT INTO ${table.tableName} (
+            id,
+            #foreach(${element} in ${table.columns})
+                ${element.columnName},
+            #end
+            createUserId, updateUserId, deleteFlag)
+        VALUES (
+            #{id,jdbcType=VARCHAR},
+            #foreach(${element} in ${table.columns})
+                #{${element.columnName},jdbcType=${element.jdbcType}},
+            #end
+            #{createUserId,jdbcType=VARCHAR}, #{updateUserId,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertBatch" parameterType="${table.packageName}.pojo.${table.className}">
+        INSERT INTO ${table.tableName} (
+            id,
+        #foreach(${element} in ${table.columns})
+            ${element.columnName},
+        #end
+        createUserId, updateUserId, deleteFlag)
+        VALUES
+        <foreach collection="${table.objName}s" item="${table.objName}" separator=",">
+            (
+            #{${table.objName}.id,jdbcType=VARCHAR},
+            #foreach(${element} in ${table.columns})
+                #{${table.objName}.${element.columnName},jdbcType=${element.jdbcType}},
+            #end
+            #{${table.objName}.createUserId,jdbcType=VARCHAR}, 
+            #{${table.objName}.updateUserId,jdbcType=VARCHAR}, 
+            #{${table.objName}.deleteFlag,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="${table.packageName}.pojo.${table.className}">
+        INSERT INTO ${table.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                id,
+            #foreach(${element} in ${table.columns})
+            <if test="${element.columnName} != null">
+                ${element.columnName},
+            </if>
+            #end
+            <if test="createUserId != null">
+                createUserId,
+            </if>
+            <if test="updateUserId != null">
+                updateUserId,
+            </if>
+            <if test="deleteFlag != null">
+                deleteFlag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{id,jdbcType=VARCHAR},
+            #foreach(${element} in ${table.columns})
+                <if test="${element.columnName} != null">
+                    #{${element.columnName},jdbcType=${element.jdbcType}},
+                </if>
+            #end
+            <if test="createUserId != null">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="deleteFlag != null">
+                #{deleteFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertBatchSelective" parameterType="${table.packageName}.pojo.${table.className}">
+        INSERT INTO ${table.tableName}(
+        id,
+        #foreach(${element} in ${table.columns})
+            ${element.columnName},
+        #end
+        createUserId, updateUserId, deleteFlag) VALUES
+        <foreach collection="${table.objName}s" item="${table.objName}" separator=",">
+            (
+            #{${table.objName}.id,jdbcType=VARCHAR},
+            #foreach(${element} in ${table.columns})
+                #if(${element.javaType} == 'String')
+                    ifnull(#{${table.objName}.${element.columnName},jdbcType=${element.jdbcType}}, ''),
+                #else
+                    ifnull(#{${table.objName}.${element.columnName},jdbcType=${element.jdbcType}}, 0),
+                #end
+            #end
+            ifnull(#{${table.objName}.createUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{${table.objName}.updateUserId,jdbcType=VARCHAR}, ''),
+            ifnull(#{${table.objName}.deleteFlag,jdbcType=TINYINT}, 0)
+            )
+        </foreach>
+    </insert>
+    <delete id="deleteByPk" parameterType="${table.packageName}.pojo.${table.className}">
+        DELETE
+        FROM ${table.tableName}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <delete id="deleteBatch" parameterType="${table.packageName}.pojo.${table.className}">
+        DELETE FROM ${table.tableName} WHERE id IN
+        <foreach collection="${table.objName}s" item="${table.objName}" separator="," open="(" close=")">
+            #{${table.objName}.id}
+        </foreach>
+    </delete>
+    <update id="updateByPk" parameterType="${table.packageName}.pojo.${table.className}">
+        UPDATE ${table.tableName}
+        SET
+            #foreach(${element} in ${table.columns})
+                ${element.columnName}         = #{${element.columnName},jdbcType=${element.jdbcType}},
+            #end
+            updateUserId = #{updateUserId,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPkSelective" parameterType="${table.packageName}.pojo.${table.className}">
+        UPDATE ${table.tableName}
+        <set>
+            #foreach(${element} in ${table.columns})
+                <if test="${element.columnName} != null">
+                    ${element.columnName} = #{${element.columnName},jdbcType=${element.jdbcType}},
+                </if>
+            #end
+            <if test="updateUserId != null">
+                updateUserId = #{updateUserId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateDeleteFlag" parameterType="${table.packageName}.pojo.${table.className}">
+        UPDATE ${table.tableName}
+        SET deleteFlag = #{deleteFlag,jdbcType=TINYINT}
+        WHERE id = #{id,jdbcType=VARCHAR}
+    </update>
+    <select id="select4DetailByPk" parameterType="${table.packageName}.pojo.${table.className}"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ${table.tableName} WHERE id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="select4List" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ${table.tableName} ORDER BY createTime
+    </select>
+    <select id="select4ListSelective" parameterType="${table.packageName}.pojo.${table.className}"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ${table.tableName} WHERE TRUE
+        #foreach(${element} in ${table.columns})
+            <if test="${element.columnName} != null and ${element.columnName} != ''">
+                AND ${element.columnName} = #{${element.columnName},jdbcType=${element.jdbcType}}
+            </if>
+        #end
+        ORDER BY createTime
+    </select>
+    <select id="select4Count" parameterType="${table.packageName}.pojo.${table.className}"
+            resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM ${table.tableName} WHERE TRUE
+        #foreach(${element} in ${table.columns})
+            <if test="${element.columnName} != null and ${element.columnName} != ''">
+                AND ${element.columnName} = #{${element.columnName},jdbcType=${element.jdbcType}}
+            </if>
+        #end
+    </select>
+</mapper>

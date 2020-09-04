@@ -1,0 +1,84 @@
+package ${table.packageName}.service.impl;
+
+import com.king.common.util.PrimaryKeyUtils;
+import com.king.system.util.ShiroUtils;
+
+import ${table.packageName}.pojo.${table.className};
+import ${table.packageName}.mapper.${table.className}Mapper;
+import ${table.packageName}.service.${table.className}ServiceI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ${table.className}ServiceImpl implements ${table.className}ServiceI {
+
+    private ${table.className}Mapper ${table.objName}Mapper;
+
+    @Autowired
+    public void set${table.className}Mapper(${table.className}Mapper ${table.objName}Mapper) {
+        this.${table.objName}Mapper = ${table.objName}Mapper;
+    }
+
+    @Override
+    public boolean create(${table.className} ${table.objName}) {
+        ${table.objName}.setId(PrimaryKeyUtils.uuid());
+        ${table.objName}.setCreateUserId(ShiroUtils.getLoginUserId());
+        ${table.objName}.setUpdateUserId(${table.objName}.getCreateUserId());
+
+        return ${table.objName}Mapper.insertSelective(${table.objName}) > 0;
+    }
+
+    @Override
+    public boolean createBatch(List<${table.className}> ${table.objName}s) {
+        for (${table.className} ${table.objName} : ${table.objName}s) {
+            ${table.objName}.setId(PrimaryKeyUtils.uuid());
+            ${table.objName}.setCreateUserId(ShiroUtils.getLoginUserId());
+            ${table.objName}.setUpdateUserId(${table.objName}.getCreateUserId());
+        }
+
+        return ${table.objName}Mapper.insertBatchSelective(${table.objName}s) > 0;
+    }
+
+    @Override
+    public boolean deleteByPk(${table.className} ${table.objName}) {
+        return ${table.objName}Mapper.deleteByPk(${table.objName}) > 0;
+    }
+
+    @Override
+    public boolean deleteBatch(List<${table.className}> ${table.objName}s) {
+        return ${table.objName}Mapper.deleteBatch(${table.objName}s) > 0;
+    }
+
+    @Override
+    public boolean updateByPk(${table.className} ${table.objName}) {
+        ${table.objName}.setUpdateUserId(ShiroUtils.getLoginUserId());
+
+        return ${table.objName}Mapper.updateByPkSelective(${table.objName}) > 0;
+    }
+
+    @Override
+    public boolean updateDeleteFlag(${table.className} ${table.objName}) {
+        ${table.objName}.setUpdateUserId(ShiroUtils.getLoginUserId());
+
+        return ${table.objName}Mapper.updateDeleteFlag(${table.objName}) > 0;
+    }
+
+    @Override
+    public ${table.className} read4DetailByPk(${table.className} ${table.objName}) {
+        return ${table.objName}Mapper.select4DetailByPk(${table.objName});
+    }
+
+    @Override
+    public List<${table.className}> read4List(${table.className} ${table.objName}) {
+        return ${table.objName}Mapper.select4ListSelective(${table.objName});
+    }
+
+    @Override
+    public int read4Count(${table.className} ${table.objName}) {
+        return ${table.objName}Mapper.select4Count(${table.objName});
+    }
+
+}

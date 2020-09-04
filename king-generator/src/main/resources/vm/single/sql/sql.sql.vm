@@ -1,0 +1,18 @@
+ALTER TABLE ${table.tableName}
+    ADD createUserId VARCHAR(45) DEFAULT '' NOT NULL COMMENT '创建者id';
+
+ALTER TABLE ${table.tableName}
+    ADD updateUserId VARCHAR(45) DEFAULT '' NOT NULL COMMENT '更新者id';
+
+ALTER TABLE ${table.tableName}
+    ADD createTime DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT '创建时间';
+
+ALTER TABLE ${table.tableName}
+    ADD updateTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT '更新时间';
+
+ALTER TABLE ${table.tableName}
+    ADD deleteFlag TINYINT(2) DEFAULT 0 NOT NULL COMMENT '删除标识符';
+
+ALTER TABLE ${table.tableName}
+    ADD COLUMN `id` VARCHAR(45) NOT NULL DEFAULT '' COMMENT 'ID' FIRST,
+    ADD PRIMARY KEY (`id`);

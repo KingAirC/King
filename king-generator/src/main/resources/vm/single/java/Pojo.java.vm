@@ -4,7 +4,13 @@ import lombok.Data;
 
 @Data
 public class ${table.className} {
+    private String id;
 #foreach(${element} in ${table.columns})
     private ${element.javaType} ${element.columnName};
 #end
+    private String createUserId;
+    private String updateUserId;
+    private String createTime;
+    private String updateTime;
+    private Integer deleteFlag;
 }

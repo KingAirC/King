@@ -1,7 +1,6 @@
 package com.king.generator.service.impl;
 
 import com.king.common.constant.Constants;
-import com.king.common.util.StringUtils;
 import com.king.generator.config.GenConfig;
 import com.king.generator.mapper.GenTableColumnMapper;
 import com.king.generator.mapper.GenTableMapper;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,32 +44,52 @@ public class GeneratorServiceImpl implements GeneratorServiceI {
     @Override
     public byte[] generatorCode(String tableName) {
         /*
+        处理表名
+         */
+        String[] strings = tableName.split("_");
+
+        StringBuilder pojoNameBuffer = new StringBuilder();
+        StringBuilder urlNameBuffer = new StringBuilder();
+
+        for (String s : strings) {
+            pojoNameBuffer.append(s.substring(0, 1).toUpperCase()).append(s.substring(1));
+            urlNameBuffer.append("/").append(s);
+        }
+
+        String pojoName = pojoNameBuffer.toString();
+        String urlName = urlNameBuffer.toString();
+        String packageName = GenConfig.getPackageName();
+        String[] packageNameSplitArray = packageName.split("\\.");
+
+        /*
         读取表信息
          */
         GenTable genTable = genTableMapper.select4DetailByTableName(tableName);
-        genTable.setPkColumns(new LinkedList<>());
 
         List<GenTableColumn> genTableColumns = genTableColumnMapper.selectTableColumnsByTableName(tableName);
         genTable.setColumns(genTableColumns);
 
-        String pojoName = StringUtils.convertTableName2PojoName(tableName);
         genTable.setClassName(pojoName);
-
-        genTable.setPackageName(GenConfig.getPackageName());
+        genTable.setUrlName(urlName);
+        genTable.setPackageName(packageName);
+        genTable.setModuleName(packageNameSplitArray[packageNameSplitArray.length - 1]);
+        genTable.setObjName(pojoName.substring(0, 1).toLowerCase() + pojoName.substring(1));
 
         for (GenTableColumn genTableColumn : genTableColumns) {
-            if (genTableColumn.getColumnType().startsWith("varchar") || genTableColumn.getColumnType().startsWith("datetime")) {
+            if (genTableColumn.getColumnType().startsWith("varchar")) {
                 genTableColumn.setJavaType("String");
-            } else if (genTableColumn.getColumnType().startsWith("tinyint") || genTableColumn.getColumnType().startsWith("int")) {
+                genTableColumn.setJdbcType("VARCHAR");
+            } else if (genTableColumn.getColumnType().startsWith("datetime")) {
+                genTableColumn.setJavaType("String");
+                genTableColumn.setJdbcType("TIMESTAMP");
+            } else if (genTableColumn.getColumnType().startsWith("tinyint")) {
                 genTableColumn.setJavaType("Integer");
+                genTableColumn.setJdbcType("TINYINT");
+            } else if (genTableColumn.getColumnType().startsWith("int")) {
+                genTableColumn.setJavaType("Integer");
+                genTableColumn.setJdbcType("INTEGER");
             } else {
                 genTableColumn.setJavaType("String");
-            }
-            if ("PRI".equals(genTableColumn.getKey())) {
-                genTableColumn.setIsPk(true);
-                genTable.getPkColumns().add(genTableColumn);
-            } else {
-                genTableColumn.setIsPk(false);
             }
         }
 
@@ -95,7 +113,7 @@ public class GeneratorServiceImpl implements GeneratorServiceI {
         ZipOutputStream zip = new ZipOutputStream(outputStream);
 
         for (Map.Entry<String, String> entry : entries) {
-            Template tpl = ve.getTemplate(entry.getKey());
+            Template tpl = ve.getTemplate(entry.getKey(), Constants.UTF8);
 
             StringWriter sw = new StringWriter();
             tpl.merge(ctx, sw);

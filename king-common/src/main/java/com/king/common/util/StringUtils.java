@@ -14,15 +14,4 @@ public class StringUtils {
         return ((s == null) || ("".equals(s)));
     }
 
-    public static String convertTableName2PojoName(String tableName) {
-        StringBuffer stringBuffer = new StringBuffer();
-        String[] strings = tableName.split("_");
-
-        for (String s : strings) {
-            stringBuffer.append(s.substring(0, 1).toUpperCase() + s.substring(1));
-        }
-
-        return stringBuffer.toString();
-    }
-
 }

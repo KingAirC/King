@@ -1,0 +1,116 @@
+package ${table.packageName}.mapper;
+
+import ${table.packageName}.pojo.${table.className};
+import ${table.packageName}.pojo.${table.className};
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ${table.className}Mapper {
+
+    /**
+     * 添加，属性为null就是默认值
+     *
+     * @param ${table.objName} pojo
+     * @return 插入的条数
+     */
+    int insert(${table.className} ${table.objName});
+
+    /**
+     * 批量添加
+     *
+     * @param ${table.objName}s pojo列表
+     * @return 插入的条数
+     */
+    int insertBatch(List<${table.className}> ${table.objName}s);
+
+    /**
+     * 批量选择性添加
+     *
+     * @param ${table.objName}s List
+     * @return 插入条数
+     */
+    int insertBatchSelective(List<${table.className}> ${table.objName}s);
+
+    /**
+     * 选择性添加
+     *
+     * @param ${table.objName} pojo
+     * @return 添加条数
+     */
+    int insertSelective(${table.className} ${table.objName});
+
+    /**
+     * 根据主键删除记录
+     *
+     * @param ${table.objName} pojo
+     * @return 删除的条数
+     */
+    int deleteByPk(${table.className} ${table.objName});
+
+    /**
+     * 批量删除
+     *
+     * @param ${table.objName}s pojo列表
+     * @return 删除的条数
+     */
+    int deleteBatch(List<${table.className}> ${table.objName}s);
+
+    /**
+     * 根据主键更新
+     *
+     * @param ${table.objName} pojo
+     * @return 更新的条数
+     */
+    int updateByPk(${table.className} ${table.objName});
+
+    /**
+     * 根据主键选择性更新字段
+     *
+     * @param ${table.objName} pojo
+     * @return 更新的条数
+     */
+    int updateByPkSelective(${table.className} ${table.objName});
+
+    /**
+     * 更新删除标识符
+     *
+     * @param ${table.objName} pojo
+     * @return 更新条数
+     */
+    int updateDeleteFlag(${table.className} ${table.objName});
+
+    /**
+     * 根据主键查询详细
+     *
+     * @param ${table.objName} pojo
+     * @return pojo
+     */
+    ${table.className} select4DetailByPk(${table.className} ${table.objName});
+
+    /**
+     * 根据pojo非空字段查询列表
+     *
+     * @param ${table.objName} pojo
+     * @return pojo列表
+     */
+    List<${table.className}> select4List(${table.className} ${table.objName});
+
+    /**
+     * 选择性查询列表
+     *
+     * @param ${table.objName} pojo
+     * @return List
+     */
+    List<${table.className}> select4ListSelective(${table.className} ${table.objName});
+
+    /**
+     * 根据pojo非空字段查询数量
+     *
+     * @param ${table.objName} pojo
+     * @return 数量
+     */
+    int select4Count(${table.className} ${table.objName});
+
+}

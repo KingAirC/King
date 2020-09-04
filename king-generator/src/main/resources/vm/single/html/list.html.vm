@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('${table.tableComment}')"/>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <!--  搜索  -->
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+
+                        #foreach(${element} in ${table.columns})
+                            <div class="layui-inline">
+                                <label for="${element.columnName}SearchId" class="layui-form-label">${element.columnComment}</label>
+                                <div class="layui-input-inline">
+                                    <input id="${element.columnName}SearchId" type="text" name="${element.columnName}" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                        #end
+                        
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <!--  工具栏  -->
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除</button>
+            </div>
+        </script>
+
+        <!--  数据表格  -->
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'table', 'laydate'], function () {
+        let $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+
+        table.render(king.defaultTableRender(ctx + '${table.urlName}list/page', [
+            [
+                {type: "checkbox", width: 50, fixed: 'left'},
+                {field: 'id', title: "ID", hide: true},
+                #foreach(${element} in ${table.columns})
+                {field: '${element.columnName}', minWidth: 150, title: '${element.columnComment}'},
+                #end
+                
+                {
+                    title: '操作', width: 200, align: "center", fixed: 'right', templet: function (d) {
+                        let operateBtns = '';
+
+                        operateBtns += '<a class="layui-btn layui-btn-primary layui-btn-xs data-count-detail" lay-event="detail">查看</a>';
+                        operateBtns += '<a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>';
+                        if (d.deleteFlag === 0) {
+                            operateBtns += '<a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="delete">删除</a>';
+                        }
+
+                        return operateBtns
+                    }
+                }
+            ]
+        ]));
+
+        form.on('submit(data-search-btn)', function (data) {
+            table.reload('currentTableId', {where: data.field});
+            return false
+        });
+
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                let index = layer.open(king.getLayerDefaultArgs('添加', ctx + '${table.urlName}add', function () {
+                            table.reload('currentTableId')
+                        }
+                ));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                });
+            } else if (obj.event === 'delete') {
+                $.post(ctx + '${table.urlName}delete/batch',
+                        {id: obj.data.id},
+                        function (result) {
+                            result ? table.reload('currentTableId') : layer.msg('删除失败')
+                        })
+            }
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                let index = layer.open(king.getLayerDefaultArgs('编辑', ctx + '${table.urlName}edit/' + data.id, function () {
+                    table.reload('currentTableId')
+                }));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除么', function (index) {
+                    $.post(ctx + '${table.urlName}delete',
+                            {id: data.id},
+                            function (result) {
+                                result ? obj.del() : layer.msg('删除失败')
+                            });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'detail') {
+                let index = layer.open(king.getLayerDefaultArgs('详细', ctx + '${table.urlName}detail/' + data.id));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                })
+            }
+        })
+    });
+</script>
+</body>
+</html>

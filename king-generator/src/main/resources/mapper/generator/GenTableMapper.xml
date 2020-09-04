@@ -18,7 +18,7 @@
         </if>
     </select>
     <select id="select4Count" resultType="java.lang.Integer">
-        SELECT count(0)
+        SELECT COUNT(0)
         FROM INFORMATION_SCHEMA.TABLES
         WHERE TABLE_SCHEMA = (SELECT DATABASE())
         <if test="tableName != null and tableName != ''">

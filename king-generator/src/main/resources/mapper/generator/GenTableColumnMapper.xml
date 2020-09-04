@@ -5,10 +5,9 @@
         <result column="Field" jdbcType="VARCHAR" property="columnName"/>
         <result column="Type" jdbcType="VARCHAR" property="columnType"/>
         <result column="Comment" jdbcType="VARCHAR" property="columnComment"/>
-        <result column="Key" jdbcType="VARCHAR" property="key"/>
     </resultMap>
     <sql id="Base_Column_List">
-        Field, Type, `Comment`, `Key`
+        Field, Type, `Comment`
     </sql>
     <select id="selectTableColumnsByTableName" parameterType="java.lang.String" resultMap="BaseResultMap" statementType="STATEMENT">
         SHOW FULL COLUMNS FROM ${tableName}

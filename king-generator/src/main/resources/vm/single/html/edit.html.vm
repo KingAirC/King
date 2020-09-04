@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" lang="zh">
+<head>
+    <th:block th:include="include :: admin_header('详细')"/>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    #foreach(${element} in ${table.columns})
+    <div class="layui-form-item">
+        <label for="${element.columnName}EditId" class="layui-form-label">${element.columnComment}</label>
+    <div class="layui-input-block">
+            <input name="${element.columnName}" id="${element.columnName}eEditId" type="text" class="layui-input">
+    </div>
+    </div>
+    #end
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">保存</button>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: common_js"/>
+<script th:inline="javascript">
+    layui.use(['form', 'jquery'], function () {
+        let form = layui.form,
+                layer = layui.layer,
+                $ = layui.jquery;
+
+        form.on('submit(saveBtn)', function (data) {
+            data.field.id = [[${id}]];
+            $.post(ctx + '${table.urlName}edit', data.field, function (result) {
+                if (result) {
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
+                } else {
+                    layer.msg('编辑失败')
+                }
+            })
+        })
+    });
+</script>
+</body>
+</html>

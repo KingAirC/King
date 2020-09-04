@@ -1,0 +1,176 @@
+package ${table.packageName}.controller.admin;
+
+import ${table.packageName}.pojo.${table.className};
+import ${table.packageName}.service.${table.className}ServiceI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/admin${table.urlName}")
+public class ${table.className}Controller {
+
+    private ${table.className}ServiceI ${table.objName}Service;
+
+    @Autowired
+    public void set${table.className}Service(${table.className}ServiceI ${table.objName}Service) {
+        this.${table.objName}Service = ${table.objName}Service;
+    }
+
+    /**
+     * 路由到显示页面
+     *
+     * @param model 数据
+     * @return 页面
+     */
+    @GetMapping("/index")
+    public String index(Model model) {
+        return "/${table.moduleName}/admin/index.html";
+    }
+
+    /**
+     * 路由到添加页面
+     *
+     * @return 页面
+     */
+    @GetMapping("/add")
+    public String add() {
+        return "/${table.moduleName}/admin/add.html";
+    }
+
+    /**
+     * 路由到更新页面
+     *
+     * @return 页面
+     */
+    @GetMapping("/update")
+    public String update(Model model) {
+        return "/${table.moduleName}/admin/update.html";
+    }
+
+    /**
+     * 路由到详细页面
+     *
+     * @return 页面
+     */
+    @GetMapping("/detail")
+    public String detail(Model model) {
+        return "/${table.moduleName}/admin/detail.html";
+    }
+
+    /**
+     * 添加
+     *
+     * @param ${table.objName} pojo
+     * @return 是否成功
+     */
+    @ResponseBody
+    @PostMapping("/add")
+    public boolean add(${table.className} ${table.objName}) {
+        return ${table.objName}Service.create(${table.objName});
+    }
+
+    /**
+     * 批量添加
+     *
+     * @param ${table.objName}s List
+     * @return 是否成功
+     */
+    @ResponseBody
+    @PostMapping("/add/batch")
+    public boolean addBatch(List<${table.className}> ${table.objName}s) {
+        return ${table.objName}Service.createBatch(${table.objName}s);
+    }
+
+    /**
+     * 根据主键删除
+     *
+     * @param ${table.objName} pojo
+     * @return 是否成功
+     */
+    @ResponseBody
+    @PostMapping("/delete/by/pk")
+    public boolean deleteByPk(${table.className} ${table.objName}) {
+        return ${table.objName}Service.deleteByPk(${table.objName});
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ${table.objName}s List
+     * @return 是否成功
+     */
+    @ResponseBody
+    @PostMapping("/delete/batch")
+    public boolean deleteBatch(List<${table.className}> ${table.objName}s) {
+        return ${table.objName}Service.deleteBatch(${table.objName}s);
+    }
+
+    /**
+     * 更新
+     *
+     * @param ${table.objName} pojo
+     * @return 是否成功
+     */
+    @ResponseBody
+    @PostMapping("/update/by/pk")
+    public boolean updateByPk(${table.className} ${table.objName}) {
+        return ${table.objName}Service.updateByPk(${table.objName});
+    }
+
+    /**
+     * 启用禁用
+     *
+     * @param ${table.objName} pojo
+     * @return 是否成功
+     */
+    @ResponseBody
+    @PostMapping("/update/deleteFlag")
+    public boolean updateDeleteFlag(${table.className} ${table.objName}) {
+        return ${table.objName}Service.updateDeleteFlag(${table.objName});
+    }
+
+    /**
+     * 根据主键查询详细
+     *
+     * @param ${table.objName} pojo
+     * @return pojo
+     */
+    @ResponseBody
+    @PostMapping("/read/detail")
+    public ${table.className} read4DetailByPk(${table.className} ${table.objName}) {
+        return ${table.objName}Service.read4DetailByPk(${table.objName});
+    }
+
+    /**
+     * 条件查询
+     *
+     * @param ${table.objName} pojo
+     * @return List
+     */
+    @ResponseBody
+    @PostMapping("/read/list")
+    public List<${table.className}> read4List(${table.className} ${table.objName}) {
+        return ${table.objName}Service.read4List(${table.objName});
+    }
+
+    /**
+     * 唯一性验证
+     *
+     * @param ${table.objName} pojo
+     * @return 是否唯一
+     */
+    @ResponseBody
+    @PostMapping("/unique")
+    public boolean isUnique(${table.className} ${table.objName}) {
+        return ${table.objName}Service.read4Count(${table.objName}) == 0;
+    }
+
+}
