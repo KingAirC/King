@@ -116,4 +116,7 @@ public interface SysRoleMapper {
     List<SysRole> selectBySysUserName(SysUser sysUser);
 
     List<String> select4NameBySysUserName(SysUser sysUser);
+
+    List<String> select4NameAll();
+
 }

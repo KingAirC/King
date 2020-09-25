@@ -1,7 +1,9 @@
 package com.king.generator.util;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class VelocityUtils {
 
@@ -23,6 +25,19 @@ public class VelocityUtils {
         result.put("vm/single/sql/sql.sql.vm", "sql.sql");
 
         result.put("vm/single/xml/Mapper.xml.vm", pojoName + "Mapper.xml");
+
+        return result;
+    }
+
+    public static Set<String> getDefaultFieldNames() {
+        Set<String> result = new HashSet<>();
+
+        result.add("id");
+        result.add("createUserId");
+        result.add("updateUserId");
+        result.add("createTime");
+        result.add("updateTime");
+        result.add("deleteFlag");
 
         return result;
     }

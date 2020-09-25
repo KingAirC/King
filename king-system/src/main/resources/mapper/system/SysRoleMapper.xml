@@ -183,4 +183,7 @@
                  left join sys_user U on U.id = UR.userId
         where U.loginName = #{name, jdbcType=VARCHAR}
     </select>
+    <select id="select4NameAll" resultType="java.lang.String">
+        select name from sys_role
+    </select>
 </mapper>

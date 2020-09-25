@@ -1,14 +1,15 @@
 package com.king.admin.controller.system;
 
+import com.github.pagehelper.PageHelper;
+import com.king.common.constant.Constants;
+import com.king.common.core.domain.AjaxResult;
 import com.king.system.pojo.SysRole;
+import com.king.system.pojo.SysUser;
 import com.king.system.service.SysRoleServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +32,19 @@ public class SysRoleController {
     @GetMapping("")
     public String index() {
         return "/admin/system/role/role";
+    }
+
+    @ResponseBody
+    @RequestMapping("/list/page")
+    public AjaxResult list4Page(@RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = Constants.DEFAULT_PAGE_SIZE) int limit,
+                                SysRole sysRole) {
+        PageHelper.startPage(page, limit);
+
+        AjaxResult ajaxResult = new AjaxResult(sysRoleService.read4List(sysRole));
+        ajaxResult.put("count", sysRoleService.read4Count(sysRole));
+
+        return ajaxResult;
     }
 
     /**

@@ -58,17 +58,6 @@ public class SysMenuController {
     }
 
     /**
-     * 路由到显示页面
-     *
-     * @param model 数据
-     * @return 页面
-     */
-    @GetMapping("/index")
-    public String index(Model model) {
-        return "";
-    }
-
-    /**
      * 路由到添加页面
      *
      * @return 页面

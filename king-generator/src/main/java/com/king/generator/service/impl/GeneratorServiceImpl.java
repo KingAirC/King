@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,8 +68,19 @@ public class GeneratorServiceImpl implements GeneratorServiceI {
         GenTable genTable = genTableMapper.select4DetailByTableName(tableName);
 
         List<GenTableColumn> genTableColumns = genTableColumnMapper.selectTableColumnsByTableName(tableName);
-        genTable.setColumns(genTableColumns);
 
+        // 去掉公共字段createUserId,updateUserId,createTime,updateTime,deleteFlag,id
+        List<GenTableColumn> columnsWithOutDefaultFields = new LinkedList<>();
+
+        for (GenTableColumn column : genTableColumns) {
+            if (!VelocityUtils.getDefaultFieldNames().contains(column.getColumnName())) {
+                columnsWithOutDefaultFields.add(column);
+            }
+        }
+
+        genTableColumns = columnsWithOutDefaultFields;
+
+        genTable.setColumns(genTableColumns);
         genTable.setClassName(pojoName);
         genTable.setUrlName(urlName);
         genTable.setPackageName(packageName);

@@ -48,4 +48,8 @@ public class ShiroUtils {
         return getShiroUser().getLoginName();
     }
 
+    public static boolean isAdminUser(SysUser sysUser) {
+        return "1".equals(sysUser.getId());
+    }
+
 }

@@ -116,4 +116,6 @@ public interface SysMenuMapper {
 
     List<SysMenu> select4DirAndMenuList();
 
+    List<String> select4PermissionListAll();
+
 }

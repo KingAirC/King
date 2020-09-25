@@ -47,32 +47,77 @@
             form = layui.form,
             table = layui.table;
 
-        let tableRender = {
-            elem: '#currentTableId',
-            data: [],
-            toolbar: '#toolbarDemo',
-            defaultToolbar: ['filter', 'exports', 'print', {
-                title: '提示',
-                layEvent: 'LAYTABLE_TIPS',
-                icon: 'layui-icon-tips'
-            }],
-            cols: [
-                [
-                    {type: "checkbox", width: 50},
-                    {field: 'id', style: 'display:none'},
-                    {field: 'name', width: 80, title: '角色名'},
-                    {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
-                ]
-            ],
-            limits: [50, 100],
-            limit: 50,
-            page: true,
-            skin: 'line'
-        };
 
-        table.render(tableRender);
+        table.render(king.defaultTableRender(ctx + 'admin/system/role/list/page', [
+            [
+                {type: "checkbox", width: 50, fixed: 'left'},
+                {field: 'id', title: "ID", hide: true},
+                {field: 'name', minWidth: 150, title: '角色名'},
+                {
+                    title: '操作', width: 200, align: "center", fixed: 'right', templet: function (d) {
+                        let operateBtns = '';
 
+                        operateBtns += '<a class="layui-btn layui-btn-primary layui-btn-xs data-count-detail" lay-event="detail">查看</a>';
+                        operateBtns += '<a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>';
+                        if (d.deleteFlag === 0) {
+                            operateBtns += '<a class="layui-btn layui-btn-danger layui-btn-xs data-count-delete" lay-event="delete">删除</a>';
+                        }
 
+                        return operateBtns
+                    }
+                }
+            ]
+        ]));
+
+        form.on('submit(data-search-btn)', function (data) {
+            table.reload('currentTableId', {where: data.field});
+            return false
+        });
+
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                let index = layer.open(king.getLayerDefaultArgs('添加', ctx + 'admin/system/role/add', function () {
+                        table.reload('currentTableId')
+                    }
+                ));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                });
+            } else if (obj.event === 'delete') {
+                $.post(ctx + 'admin/system/role/delete/batch',
+                    {shiroUsers: JSON.stringify(table.checkStatus('currentTableId').data)},
+                    function (result) {
+                        result ? table.reload('currentTableId') : layer.msg('删除失败')
+                    })
+            }
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                let index = layer.open(king.getLayerDefaultArgs('编辑', ctx + 'admin/system/role/edit/' + data.id, function () {
+                    table.reload('currentTableId')
+                }));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除' + data.loginName + '么', function (index) {
+                    $.post(ctx + 'admin/system/role/delete',
+                        {id: data.id},
+                        function (result) {
+                            result ? obj.del() : layer.msg('删除失败')
+                        });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'detail') {
+                let index = layer.open(king.getLayerDefaultArgs('详细', ctx + 'admin/system/role/detail/' + data.id));
+                $(window).on("resize", function () {
+                    layer.full(index)
+                })
+            }
+        })
 
     });
 </script>

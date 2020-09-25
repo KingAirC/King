@@ -334,4 +334,7 @@
         WHERE deleteFlag = 0 AND type IN ('D', 'M')
         ORDER BY sort
     </select>
+    <select id="select4PermissionListAll" resultType="java.lang.String">
+        select permission from sys_menu
+    </select>
 </mapper>

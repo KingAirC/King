@@ -4,6 +4,7 @@ import com.king.system.pojo.SysUser;
 import com.king.system.service.SysMenuServiceI;
 import com.king.system.service.SysRoleServiceI;
 import com.king.system.service.SysUserServiceI;
+import com.king.system.util.ShiroUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -13,8 +14,6 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class UserRealm extends AuthorizingRealm {
 
@@ -26,10 +25,12 @@ public class UserRealm extends AuthorizingRealm {
     public void setSysUserService(SysUserServiceI sysUserService) {
         this.sysUserService = sysUserService;
     }
+
     @Autowired
     public void setSysRoleServiceI(SysRoleServiceI sysRoleService) {
         this.sysRoleService = sysRoleService;
     }
+
     @Autowired
     public void setSysMenuServiceI(SysMenuServiceI sysMenuService) {
         this.sysMenuService = sysMenuService;
@@ -37,7 +38,33 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     public String getName() {
-        return "UserRealm";
+        return "UserRealm" ;
+    }
+
+    /**
+     * admin放行
+     *
+     * @param principals PrincipalCollection
+     * @param permission String
+     * @return boolean
+     */
+    @Override
+    public boolean isPermitted(PrincipalCollection principals, String permission) {
+        return ShiroUtils.isAdminUser((SysUser) principals.getPrimaryPrincipal()) ||
+                super.isPermitted(principals, permission);
+    }
+
+    /**
+     * admin放行
+     *
+     * @param principals     PrincipalCollection
+     * @param roleIdentifier String
+     * @return boolean
+     */
+    @Override
+    public boolean hasRole(PrincipalCollection principals, String roleIdentifier) {
+        return ShiroUtils.isAdminUser((SysUser) principals.getPrimaryPrincipal()) ||
+                super.hasRole(principals, roleIdentifier);
     }
 
     /**
@@ -48,19 +75,19 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        SysUser sysUser = (SysUser) principals.iterator().next();
+        SysUser sysUser = ShiroUtils.getShiroUser();
 
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
-        // 查询当前用户所具有的角色
-        List<String> roleNameListByShiroUserName = sysRoleService.read4SysRoleNameListBySysUserName(sysUser);
-        Set<String> roles = new HashSet<>(roleNameListByShiroUserName);
-        simpleAuthorizationInfo.setRoles(roles);
-
-        // 查询当前用户所具有的权限
-        List<String> permissionList = sysMenuService.read4PermissionListBySysUserLoginName(sysUser);
-        Set<String> stringPermissions = new HashSet<>(permissionList);
-        simpleAuthorizationInfo.setStringPermissions(stringPermissions);
+        if (ShiroUtils.isAdminUser(sysUser)) {
+            simpleAuthorizationInfo.addRole("1");
+            simpleAuthorizationInfo.addStringPermission("*:*:*");
+        } else {
+            simpleAuthorizationInfo.setRoles(
+                    new HashSet<>(sysRoleService.read4SysRoleNameListBySysUserName(sysUser)));
+            simpleAuthorizationInfo.setStringPermissions(
+                    new HashSet<>(sysMenuService.read4PermissionListBySysUserLoginName(sysUser)));
+        }
 
         return simpleAuthorizationInfo;
     }
